@@ -42,8 +42,8 @@ and override onPhotonDialogResult, where you define what to do with the result
     @Override
     public void onPhotonDialogResult(City city) {
 
-    String cityName = getCityName();
-    String countryCode = getCountryCode();
+    String cityName = city.getCityName();
+    String countryCode = city.getCountryCode();
     float lon = city.getLongitude();
     float lat = city.getLatitude();
     
