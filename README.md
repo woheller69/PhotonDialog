@@ -4,7 +4,10 @@
 
 This library contains an Android DialogFragment for search-as-you-type via the photon geocoding API.
 (see https://github.com/komoot/photon and https://photon.komoot.io/)
-You can type an address and get the coordinates back.
+You can type an address and get the coordinates back. The result will be shown on a map.
+
+<img src="PhotonDialog.png" width="150"/> 
+
 
 ### Installation
 
