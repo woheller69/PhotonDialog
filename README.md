@@ -23,7 +23,7 @@ Add the library dependency to your build.gradle file.
 
 ```gradle
 dependencies {
-    implementation 'com.github.woheller69:PhotonDialog:-SNAPSHOT'
+    implementation 'com.github.woheller69:PhotonDialog:V1.0'
 }
 ```
 
