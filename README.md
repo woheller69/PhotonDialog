@@ -60,10 +60,28 @@ Open a search dialog:
         photonDialog.setTitle("Search");
         photonDialog.setNegativeButtonText("Cancel");
         photonDialog.setPositiveButtonText("Select");
+        
+        //Optional: Define countries. Otherwise locations in all countries are shown
+        ArrayList<String> countryList = new ArrayList<>();
+        countryList.add("DE");
+        countryList.add("AT");
+        photonDialog.setCountryList(countryList);
+        
         photonDialog.show(fragmentManager, "");
         getSupportFragmentManager().executePendingTransactions();
         photonDialog.getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
 ```
 
+### License
+
+This library is licensed under the GPLv3.
+
+The library uses:
+- Leaflet which is licensed under the very permissive <a href='https://github.com/Leaflet/Leaflet/blob/master/FAQ.md'>2-clause BSD License</a>
+- Map data from OpenStreetMap, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF) (https://www.openstreetmap.org/copyright)
+- Search-as-you-type location search is provided by [photon API](https://photon.komoot.io), based on OpenStreetMap. See also (https://github.com/komoot/photon)
+- Android Volley (com.android.volley) (https://github.com/google/volley) which is licensed under <a href='https://github.com/google/volley/blob/master/LICENSE'>Apache License Version 2.0</a>
+- AndroidX libraries (https://github.com/androidx/androidx) which is licensed under <a href='https://github.com/androidx/androidx/blob/androidx-main/LICENSE.txt'>Apache License Version 2.0</a>
+- AutoSuggestTextViewAPICall (https://github.com/Truiton/AutoSuggestTextViewAPICall) which is licensed under <a href='https://github.com/Truiton/AutoSuggestTextViewAPICall/blob/master/LICENSE'>Apache License Version 2.0</a>
 

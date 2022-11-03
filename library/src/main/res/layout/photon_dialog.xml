@@ -17,4 +17,10 @@
         android:maxLines="1"
         android:inputType="text" />
 
+    <WebView
+        android:id="@+id/mapView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
 </LinearLayout>

@@ -3,7 +3,6 @@ package org.woheller69.photondialog;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import android.annotation.SuppressLint;
@@ -11,19 +10,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
@@ -54,6 +51,7 @@ public class PhotonDialog extends DialogFragment {
         private AutoCompleteTextView autoCompleteTextView;
         City selectedCity;
 
+        private ArrayList<String> countryList=null;
         private String title="Title";
         private String negativeButtonText= "OK";
         private String positiveButtonText= "Cancel";
@@ -99,6 +97,9 @@ public class PhotonDialog extends DialogFragment {
             builder.setView(view);
             builder.setTitle(title);
 
+            final WebView webview =  rootView.findViewById(R.id.mapView);
+            webview.getSettings().setJavaScriptEnabled(true);
+            webview.setBackgroundColor(0x00000000);
 
             autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.autoCompleteTextView);
             //Setting up the adapter for AutoSuggest
@@ -113,6 +114,9 @@ public class PhotonDialog extends DialogFragment {
                         //Hide keyboard to have more space
                         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                        //Show city on map
+                        webview.setVisibility(View.VISIBLE);
+                        webview.loadUrl("file:///android_asset/map.html?lat=" + selectedCity.getLatitude() + "&lon=" + selectedCity.getLongitude());
                     });
 
             autoCompleteTextView.addTextChangedListener(new TextWatcher() {
@@ -197,9 +201,17 @@ public class PhotonDialog extends DialogFragment {
                         city.setCountryCode(countrycode);
                         city.setLatitude((float) jsonCoordinates.getDouble(1));
                         city.setLongitude((float) jsonCoordinates.getDouble(0));
-                        cityList.add(city);
-                        stringList.add(citystring);
-
+                        if (countryList==null){
+                            cityList.add(city);
+                            stringList.add(citystring);
+                        } else {
+                            for(String country:countryList){
+                                if (country.equals(countrycode)){
+                                    cityList.add(city);
+                                    stringList.add(citystring);
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -236,6 +248,9 @@ public class PhotonDialog extends DialogFragment {
         this.negativeButtonText = negativeButtonText;
     }
 
+    public void setCountryList(ArrayList<String> countryList) {
+            this.countryList=countryList;
+    }
 }
 
 class AutoSuggestAdapter extends ArrayAdapter<String> implements Filterable {
