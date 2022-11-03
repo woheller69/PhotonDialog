@@ -6,8 +6,6 @@ This library contains an Android DialogFragment for search-as-you-type via the p
 (see https://github.com/komoot/photon and https://photon.komoot.io/)
 You can type an address and get the coordinates back.
 
-This project is forked from Truiton / AutoSuggestTextViewAPICall (https://github.com/Truiton/AutoSuggestTextViewAPICall) which is licensed under Apache License 2.0
-
 ### Installation
 
 Add the JitPack repository to your root build.gradle at the end of repositories:
