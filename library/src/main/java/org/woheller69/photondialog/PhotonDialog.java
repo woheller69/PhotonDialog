@@ -36,8 +36,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class PhotonDialog extends DialogFragment {
 
@@ -55,6 +57,7 @@ public class PhotonDialog extends DialogFragment {
         private String title="Title";
         private String negativeButtonText= "OK";
         private String positiveButtonText= "Cancel";
+        private String userAgentString = null;
 
         private static final int TRIGGER_AUTO_COMPLETE = 100;
         private static final long AUTO_COMPLETE_DELAY = 300;
@@ -99,6 +102,10 @@ public class PhotonDialog extends DialogFragment {
 
             final WebView webview =  rootView.findViewById(R.id.mapView);
             webview.getSettings().setJavaScriptEnabled(true);
+            if (userAgentString!=null) {
+                webview.getSettings().setUserAgentString(userAgentString);
+            }
+
             webview.setBackgroundColor(0x00000000);
 
             autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.autoCompleteTextView);
@@ -157,7 +164,7 @@ public class PhotonDialog extends DialogFragment {
 
         }
         private void makeApiCall (String text){
-            photonApiCall.make(getContext(), text, url, lang, response -> {
+            photonApiCall.make(getContext(), text, url, lang, userAgentString, response -> {
                 //parsing logic, please change it as per your requirement
                 List<String> stringList = new ArrayList<>();
                 List<City> cityList = new ArrayList<>();
@@ -251,6 +258,9 @@ public class PhotonDialog extends DialogFragment {
     public void setCountryList(ArrayList<String> countryList) {
             this.countryList=countryList;
     }
+
+    public void setUserAgentString(String userAgentString) { this.userAgentString=userAgentString;}
+
 }
 
 class AutoSuggestAdapter extends ArrayAdapter<String> implements Filterable {
@@ -346,11 +356,26 @@ class photonApiCall {
         getRequestQueue().add(req);
     }
 
-    public static void make(Context ctx, String query, String url, String lang, Response.Listener<String>
+    public static void make(Context ctx, String query, String url, String lang, String userAgent, Response.Listener<String>
             listener, Response.ErrorListener errorListener) {
         url = url + query+"&lang="+lang;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                listener, errorListener);
+
+        StringRequest stringRequest;
+        if (userAgent!=null){
+            stringRequest = new StringRequest(Request.Method.GET, url,
+                    listener, errorListener) {
+                @Override
+                public Map<String, String> getHeaders() {  //from https://stackoverflow.com/questions/17049473/how-to-set-custom-header-in-volley-request
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("User-Agent", userAgent);
+                    return params;
+                }
+            };
+        }else{
+            stringRequest = new StringRequest(Request.Method.GET, url,
+                    listener, errorListener);
+        }
+
         photonApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
     }
 }

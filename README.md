@@ -70,6 +70,9 @@ Open a search dialog:
         countryList.add("AT");
         photonDialog.setCountryList(countryList);
         
+        //Optional: Define User-Agent
+        photonDialog.setUserAgentString(BuildConfig.APPLICATION_ID+"/"+BuildConfig.VERSION_NAME);
+        
         photonDialog.show(fragmentManager, "");
         getSupportFragmentManager().executePendingTransactions();
         photonDialog.getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
