@@ -35,6 +35,8 @@ import androidx.fragment.app.DialogFragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,7 +152,11 @@ public class PhotonDialog extends DialogFragment {
             handler = new Handler(Looper.getMainLooper(), msg -> {
                 if (msg.what == TRIGGER_AUTO_COMPLETE) {
                     if (!TextUtils.isEmpty(autoCompleteTextView.getText())) {
-                        makeApiCall(autoCompleteTextView.getText().toString());
+                        try {
+                            makeApiCall(URLEncoder.encode(autoCompleteTextView.getText().toString(), "UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 return false;
