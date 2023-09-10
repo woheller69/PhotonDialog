@@ -78,6 +78,11 @@ public class PhotonDialog extends DialogFragment {
             }
         }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) dismiss();
+    }
 
         @NonNull
         @SuppressLint("SetJavaScriptEnabled")
