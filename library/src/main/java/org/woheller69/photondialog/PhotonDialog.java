@@ -57,8 +57,8 @@ public class PhotonDialog extends DialogFragment {
 
         private ArrayList<String> countryList=null;
         private String title="Title";
-        private String negativeButtonText= "OK";
-        private String positiveButtonText= "Cancel";
+        private String negativeButtonText= "Cancel";
+        private String positiveButtonText= "OK";
         private String userAgentString = null;
 
         private static final int TRIGGER_AUTO_COMPLETE = 100;
