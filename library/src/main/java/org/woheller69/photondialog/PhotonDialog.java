@@ -63,6 +63,8 @@ public class PhotonDialog extends DialogFragment {
 
         private static final int TRIGGER_AUTO_COMPLETE = 100;
         private static final long AUTO_COMPLETE_DELAY = 300;
+        private static final int TRIGGER_HIDE_KEYBOARD = 200;
+        private static final long HIDE_KEYBOARD_DELAY = 3000;
         private Handler handler;
         private AutoSuggestAdapter autoSuggestAdapter;
         String url = "https://photon.komoot.io/api/?q=";
@@ -144,8 +146,9 @@ public class PhotonDialog extends DialogFragment {
                 public void onTextChanged(CharSequence s, int start, int before,
                                           int count) {
                     handler.removeMessages(TRIGGER_AUTO_COMPLETE);
-                    handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE,
-                            AUTO_COMPLETE_DELAY);
+                    handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE, AUTO_COMPLETE_DELAY);
+                    handler.removeMessages(TRIGGER_HIDE_KEYBOARD);
+                    handler.sendEmptyMessageDelayed(TRIGGER_HIDE_KEYBOARD, HIDE_KEYBOARD_DELAY);
                 }
 
                 @Override
@@ -163,6 +166,10 @@ public class PhotonDialog extends DialogFragment {
                             e.printStackTrace();
                         }
                     }
+                } else if (msg.what == TRIGGER_HIDE_KEYBOARD) {
+                    //Hide keyboard to show entries behind the keyboard
+                    final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
                 }
                 return false;
             });
