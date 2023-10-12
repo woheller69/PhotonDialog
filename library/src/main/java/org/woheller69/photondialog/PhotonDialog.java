@@ -51,6 +51,7 @@ public class PhotonDialog extends DialogFragment {
         public PhotonDialogResult mPhotonDialogResult;
         Activity activity;
         View rootView;
+        private WebView webview;
 
         private AutoCompleteTextView autoCompleteTextView;
         City selectedCity;
@@ -70,6 +71,10 @@ public class PhotonDialog extends DialogFragment {
         String url = "https://photon.komoot.io/api/?q=";
         String lang = "default";
 
+        public PhotonDialog() {
+            setRetainInstance(true);
+        }
+
         @Override
         public void onAttach (@NonNull Context context){
             super.onAttach(context);
@@ -80,11 +85,18 @@ public class PhotonDialog extends DialogFragment {
             }
         }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) dismiss();
-    }
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (savedInstanceState != null) dismiss();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            handler.removeMessages(TRIGGER_HIDE_KEYBOARD);
+            if(selectedCity != null && webview != null) webview.loadUrl("file:///android_asset/map.html?lat=" + selectedCity.getLatitude() + "&lon=" + selectedCity.getLongitude());
+        }
 
         @NonNull
         @SuppressLint("SetJavaScriptEnabled")
@@ -109,7 +121,7 @@ public class PhotonDialog extends DialogFragment {
             builder.setView(view);
             builder.setTitle(title);
 
-            final WebView webview =  rootView.findViewById(R.id.mapView);
+            webview =  rootView.findViewById(R.id.mapView);
             webview.getSettings().setJavaScriptEnabled(true);
             if (userAgentString!=null) {
                 webview.getSettings().setUserAgentString(userAgentString);
